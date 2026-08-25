@@ -11,17 +11,20 @@ Node* cloneGraph(Node* node) {
   if (node == nullptr) { return nullptr; }
   
   to_visit[node->val] = node;
+  new_graph[count] = new Node(count);
 
   while(to_visit.find(count) != to_visit.end()) {
     
     node = to_visit[count];
-    new_graph[count] = new Node(count);
 
     for (const auto& neighbor: node->neighbors) {
       if (to_visit.find(neighbor->val) == to_visit.end()) {
         to_visit[neighbor->val] = neighbor;
       }
-      new_graph[count]->neighbors.emplace_back(neighbor);
+      if (new_graph.find(neighbor->val) == new_graph.end()) {
+        new_graph[neighbor->val] = new Node(neighbor->val);
+      }
+      new_graph[count]->neighbors.emplace_back(new_graph[neighbor->val]);
     }
     count++;
   }
