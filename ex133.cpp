@@ -1,7 +1,8 @@
 #include "node.h"
 #include <iostream>
-#include <unordered_set>
+#include <set>
 #include <queue>
+#include <map>
 
 Node* cloneGraph(Node* node) {
   return nullptr;
@@ -9,21 +10,29 @@ Node* cloneGraph(Node* node) {
 
 void printList(Node* node) {
   
-  std::unordered_set<int> printed_nodes;
-  std::queue<Node*> to_print;
+  std::map<int, Node*> to_print; 
+  int count = 0;
   if (node == nullptr) { return; }
+
+  to_print[node->val] = node;
+  count = node->val;
+
   std::cout << "[";
-  while (true) {
-   std::cout << "node: " << node->val << " -> "; 
+  while (to_print.find(count) != to_print.end()) {
+
+   node = to_print[count];
+   std::cout << "[";
+   size_t neighbor_cnt = 0;
    for (const auto& neighbor: node->neighbors) {
-    std::cout << neighbor->val << ",";
-    if (printed_nodes.find(neighbor->val) == printed_nodes.end()) to_print.push(neighbor);
+    std::cout << neighbor->val;
+    if (neighbor_cnt < node->neighbors.size() - 1) std::cout << ",";
+    if (to_print.find(neighbor->val) == to_print.end()) {
+      to_print[neighbor->val] = neighbor;
+    }
+    neighbor_cnt++;
    }
-   printed_nodes.insert(node->val);
-   if (to_print.empty()) break;
-   
-   node = to_print.front();
-   to_print.pop();
+   std::cout << "]";
+   count++;
   }
   std::cout << "]\n";
 }
