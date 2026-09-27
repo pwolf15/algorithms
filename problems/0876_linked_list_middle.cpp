@@ -15,22 +15,12 @@ ListNode* middleNode(ListNode* head) {
 }
 }
 
-TEST(P0876, Basic) {
+TEST(P0876, OddLength) {
+  TestList l{1, 2, 3, 4, 5};
+  EXPECT_EQ(p0876::middleNode(l.head()), l.at(2));
+}
 
-  ListNode* l1 = new ListNode(1);
-  l1->next = new ListNode(2);
-  l1->next->next = new ListNode(3);
-  l1->next->next->next = new ListNode(4);
-  l1->next->next->next->next = new ListNode(5);
-
-  EXPECT_EQ(p0876::middleNode(l1), l1->next->next); 
-
-  ListNode* l2 = new ListNode(1);
-  l2->next = new ListNode(2);
-  l2->next->next = new ListNode(3);
-  l2->next->next->next = new ListNode(4);
-  l2->next->next->next->next = new ListNode(5);
-  l2->next->next->next->next->next = new ListNode(6);
-
-  EXPECT_EQ(p0876::middleNode(l2), l2->next->next->next);
+TEST(P0876, EvenLength) {
+  TestList l{1, 2, 3, 4, 5, 6};
+  EXPECT_EQ(p0876::middleNode(l.head()), l.at(3));
 }
