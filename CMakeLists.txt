@@ -7,6 +7,7 @@ FetchContent_Declare(googletest
   URL https://github.com/google/googletest/archive/refs/tags/v1.15.2.zip)
 FetchContent_MakeAvailable(googletest)
 
+include_directories(${PROJECT_SOURCE_DIR}/include)
 enable_testing()
 file(GLOB SOLUTIONS problems/*.cpp)
 add_executable(tests ${SOLUTIONS})

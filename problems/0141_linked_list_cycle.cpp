@@ -3,33 +3,38 @@
 #include <gtest/gtest.h>
 #include <ListNode.h>
 
+// brute force solution
+#include <unordered_set>
+#include <iostream>
+
 namespace p0141 {
 bool hasCycle(ListNode* head) {
 #ifdef BRUTE_FORCE
+  std::unordered_set<ListNode*> nodes_seen;
 
+  while (head) {
+    if (nodes_seen.find(head) != nodes_seen.end()) return true;
+
+    nodes_seen.insert(head);
+
+    head = head->next;
+  }
+  
+  return false;
 #else
 
   // 2 pointers approach
-  ListNode *p_step1, *p_step2;
-
-  // stopping condition: compare with head
-  p_step1 = p_step2 = head;
+  ListNode *slow = head;
+  ListNode *fast = head;
  
-  while (true) {
-    if (!p_step1 || !p_step2) return false;
-   
-    // advance 1 step 
-    p_step1 = p_step1->next;
-    
-    // advance 2 steps
-    p_step2 = p_step2->next;
+  while (fast && fast->next) {
 
-    if (!p_step2) return false;
-    p_step2 = p_step2->next;
-
-    if (p_step1 == p_step2 && p_step1) return true;
+    slow = slow->next;
+    fast = fast->next->next;
+    if (slow == fast) return true;
   }
 
+  return false;
 #endif
 }
 }
