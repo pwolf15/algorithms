@@ -39,26 +39,8 @@ bool hasCycle(ListNode* head) {
 }
 }
 
-TEST(P0141, Basic) {
-  
-  // example 1
-  ListNode* l1 = new ListNode(3);
-  l1->next = new ListNode(2);
-  l1->next->next = new ListNode(0);
-  l1->next->next->next = new ListNode(-4);
-  l1->next->next->next->next = l1->next;
-
-  EXPECT_EQ(p0141::hasCycle(l1->next), true);
-
-  // example 2
-  ListNode *l2 = new ListNode(1);
-  l2->next = new ListNode(2);
-  l2->next->next = l2;
-
-  EXPECT_EQ(p0141::hasCycle(l2), true);
-
-  // example 3
-  ListNode *l3 = new ListNode(1);
-  
-  EXPECT_EQ(p0141::hasCycle(l3), false);
+TEST(P0141, Cycle) {
+  EXPECT_TRUE(p0141::hasCycle(TestList({1,2,3,4,5},2).head()));
+  EXPECT_FALSE(p0141::hasCycle(TestList({1,2,3}).head()));
+  EXPECT_FALSE(p0141::hasCycle(TestList({}).head()));
 }
