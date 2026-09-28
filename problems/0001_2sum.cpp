@@ -1,62 +1,34 @@
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <unordered_map>
-#include <set>
+#include <vector>
 
 namespace p0001 {
-std::vector<int> twoSum(std::vector<int>& nums, int target) {
-  std::unordered_map<int, std::set<int>> lookup;
+std::vector<int> twoSum(const std::vector<int>& nums, int target) {
   
-  // map each element to its set of indices
-  for (size_t i = 0; i < nums.size(); ++i) {
-    lookup[nums[i]].insert(i);
-  }
-  
-  // iterate over nums
-  // search lookup for target - nums[i]a
-  std::vector<int> result = {};
-  for (size_t i = 0; i < nums.size(); ++i) {
-    auto indices = lookup[target-nums[i]];
-    
-    if (indices.empty() || (nums[i] == target - nums[i] && indices.size() == 1)) {
-      // not a match  
-      continue;
-    } else if (nums[i] == target - nums[i]) {
-      result.push_back(*indices.begin());
-      result.push_back(*indices.rbegin());
-      return result;
-    } else {
-      result.push_back(*lookup[nums[i]].begin());
-      result.push_back(*lookup[target-nums[i]].begin());
-      return result;
+  std::unordered_map<int, int> seen;
+  for (int i = 0; i < static_cast<int>(nums.size()); ++i) 
+  {
+    auto it = seen.find(target - nums[i]);
+    if (it != seen.end()) 
+    {
+      return { it->second, i }; 
     }
+
+    seen[nums[i]] = i;
   }
-  return result;
+  return {};
 }
 }
 
 TEST(P0001, Basic) {
-  auto compare_outputs = [](std::vector<int> a, std::vector<int> b) {
-    if (a.size() != 2 || b.size() != 2) return false;
 
-    std::sort(a.begin(), a.end());
-    std::sort(b.begin(), b.end());
-    
-    for (size_t i = 0; i < a.size(); ++i) {
-      if (a[i] != b[i]) return false;
-    }
-    return true;
-  };  
+  auto sorted = [](std::vector<int> v) { std::sort(v.begin(), v.end()); return v; };
 
-  std::vector<int> nums = {2,7,11,15};
-  std::vector<int> exp = {0,1};
-  int target = 9;
-
-  EXPECT_TRUE(compare_outputs(p0001::twoSum(nums, target), exp));
-
-  nums = {3,2,4}, target = 6, exp = {1,2};
-  EXPECT_TRUE(compare_outputs(p0001::twoSum(nums, target), exp));
-
-  nums = {3,3}, target = 6, exp = {0,1};
-  EXPECT_TRUE(compare_outputs(p0001::twoSum(nums, target), exp));
+  EXPECT_THAT(p0001::twoSum({2,7,11,15}, 9), testing::ElementsAre(0, 1));
+  EXPECT_THAT(p0001::twoSum({3,2,4}, 6), testing::ElementsAre(1, 2));
+  EXPECT_THAT(p0001::twoSum({3,3}, 6), testing::ElementsAre(0,1));
+  EXPECT_THAT(p0001::twoSum({-3,4,3,90}, 0), testing::ElementsAre(0,2));
 }
