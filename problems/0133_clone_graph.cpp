@@ -1,3 +1,5 @@
+#include <gtest/gtest.h> 
+
 #include "node.h"
 #include <iostream>
 #include <set>
