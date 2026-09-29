@@ -32,7 +32,7 @@ bool canConstruct(std::string ransomNote, std::string magazine) {
   return true;
 }
 
-int main() {
+int run_can_construct() {
   std::cout << canConstruct("a", "b") << "\n";
   std::cout << canConstruct("aa", "ab") << "\n";
   std::cout << canConstruct("aa", "aab") << "\n";  

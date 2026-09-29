@@ -97,7 +97,7 @@ int myAtoi(const std::string& s) {
   return result;
 }
 
-int main() {
+int run_my_atoi() {
 
   std::vector<std::string> test_strs = {
     "42",

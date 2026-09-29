@@ -57,7 +57,7 @@ std::string longestPalindrome(std::string s) {
 #endif
 }
 
-int main() {
+int run_longest_palindrome() {
   std::cout << longestPalindrome("bb") << "\n";
   std::cout << longestPalindrome("babad") << "\n";
   std::cout << longestPalindrome("cbbd") << "\n";

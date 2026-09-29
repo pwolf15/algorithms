@@ -62,7 +62,7 @@ void printList(Node* node) {
   std::cout << "]\n";
 }
 
-int main() {
+int run_clone_graph() {
   std::vector<Node*> nodes;
   for (int i = 1; i <= 4; ++i) {
     nodes.emplace_back(new Node(i));
