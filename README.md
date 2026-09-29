@@ -1,4 +1,4 @@
-# Leetcode
+# algorithms 
 
 Collection of solutions to various programming exercises.
 
