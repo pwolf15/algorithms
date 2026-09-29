@@ -1,11 +1,11 @@
+#include <ListNode.h>
+#include <gtest/gtest.h>
+
 #include <cstddef>
 
-#include <gtest/gtest.h>
-#include <ListNode.h>
-
 // brute force solution
-#include <unordered_set>
 #include <iostream>
+#include <unordered_set>
 
 namespace p0141 {
 bool hasCycle(ListNode* head) {
@@ -19,16 +19,15 @@ bool hasCycle(ListNode* head) {
 
     head = head->next;
   }
-  
+
   return false;
 #else
 
   // 2 pointers approach
-  ListNode *slow = head;
-  ListNode *fast = head;
- 
-  while (fast && fast->next) {
+  ListNode* slow = head;
+  ListNode* fast = head;
 
+  while (fast && fast->next) {
     slow = slow->next;
     fast = fast->next->next;
     if (slow == fast) return true;
@@ -37,10 +36,10 @@ bool hasCycle(ListNode* head) {
   return false;
 #endif
 }
-}
+}  // namespace p0141
 
 TEST(P0141, Cycle) {
-  EXPECT_TRUE(p0141::hasCycle(TestList({1,2,3,4,5},2).head()));
-  EXPECT_FALSE(p0141::hasCycle(TestList({1,2,3}).head()));
+  EXPECT_TRUE(p0141::hasCycle(TestList({1, 2, 3, 4, 5}, 2).head()));
+  EXPECT_FALSE(p0141::hasCycle(TestList({1, 2, 3}).head()));
   EXPECT_FALSE(p0141::hasCycle(TestList({}).head()));
 }

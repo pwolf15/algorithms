@@ -3,7 +3,7 @@
 #include <vector>
 
 class Node {
-public:
+  public:
   int val;
   std::vector<Node*> neighbors;
   Node() {
