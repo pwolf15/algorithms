@@ -3,15 +3,21 @@
 #include "tree_node.h"
 
 namespace p0543 {
-int max_height(TreeNode* root) {
+int max_height(TreeNode* root, int& max_diameter) {
   if (root == nullptr)
     return 0;
-  else
-    return 1 + std::max(max_height(root->left), max_height(root->right));
+  else {
+    int max_height_left = max_height(root->left, max_diameter);
+    int max_height_right = max_height(root->right, max_diameter);
+    max_diameter = std::max(max_diameter, max_height_left + max_height_right);
+    return 1 + std::max(max_height_left, max_height_right);
+  }
 }
 
 int diameterOfBinaryTree(TreeNode* root) {
-  return max_height(root->left) + max_height(root->right);
+  int max_diameter = 0;
+  int height = max_height(root, max_diameter);
+  return max_diameter;
 }
 }  // namespace p0543
 
