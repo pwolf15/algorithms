@@ -1,5 +1,5 @@
-#include <list_node.h>
 #include <gtest/gtest.h>
+#include <list_node.h>
 
 #include <cstddef>
 
