@@ -6,44 +6,38 @@
 
 namespace p0015 {
 std::vector<std::vector<int>> threeSum(const std::vector<int>& nums_input) {
-  std::vector<std::vector<int>> results;
-  std::vector<int> nums;
-  std::copy(nums_input.begin(), nums_input.end(), std::back_insert_iterator(nums));
+  std::vector<std::vector<int>> triplets;
+
+  // sort nums
+  std::vector<int> nums = nums_input;
   std::sort(nums.begin(), nums.end());
-  for (int i = 0; i < nums.size(); ++i) {
-    // skip duplicates
-    if (i && (nums[i] == nums[i - 1])) continue;
 
-    // positive - no more matches
-    if (nums[i] > 0) break;
+  for (int i = 0; i < static_cast<int>(nums.size()); ++i) {
+    if (nums[i] > 0) break;  // positive elements, sum cannot be zero
 
-    int lo = i + 1, hi = nums.size() - 1;
+    if (i && nums[i] == nums[i - 1]) continue;
+
+    int lo = i + 1, hi = static_cast<int>(nums.size()) - 1;
     while (lo < hi) {
-      // skip duplicates
-      if (lo > i + 1 && nums[lo] == nums[lo - 1]) {
-        lo++;
-        continue;
-      }
-      if (hi < nums.size() - 1 && nums[hi] == nums[hi + 1]) {
-        hi--;
-        continue;
-      }
+      int sum = nums[i] + nums[lo] + nums[hi];
+      if (sum == 0) {
+        triplets.push_back({nums[i], nums[lo], nums[hi]});
 
-      int sum = nums[hi] + nums[lo] + nums[i];
-      if (sum < 0) {
+        while (lo < hi && nums[lo] == nums[lo + 1]) lo++;
+        while (lo < hi && nums[hi] == nums[hi - 1]) hi--;
+        ++lo;
+        --hi;
+      } else if (sum < 0) {
+        // too low
         lo++;
-      } else if (sum > 0) {
-        hi--;
       } else {
-        std::vector<int> new_result{nums[i], nums[hi], nums[lo]};
-        results.emplace_back(new_result);
+        // too high
         hi--;
-        lo++;
       }
     }
   }
 
-  return results;
+  return triplets;
 }
 }  // namespace p0015
 
@@ -64,6 +58,9 @@ TEST(P0015, ThreeSum) {
               testing::UnorderedElementsAre(testing::UnorderedElementsAre(-2, 0, 2),
                                             testing::UnorderedElementsAre(-2, 1, 1)));
 
+  nums = {-4, 2, 2, 2, 2};
+  EXPECT_THAT(p0015::threeSum(nums),
+              testing::UnorderedElementsAre(testing::UnorderedElementsAre(-4, 2, 2)));
   nums = {-3, -1, 0, 1, 2, 3};
   EXPECT_THAT(p0015::threeSum(nums),
               testing::UnorderedElementsAre(testing::UnorderedElementsAre(-3, 0, 3),
