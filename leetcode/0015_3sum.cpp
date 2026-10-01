@@ -23,16 +23,17 @@ std::vector<std::vector<int>> threeSum(const std::vector<int>& nums_input) {
       if (sum == 0) {
         triplets.push_back({nums[i], nums[lo], nums[hi]});
 
-        while (lo < hi && nums[lo] == nums[lo + 1]) lo++;
-        while (lo < hi && nums[hi] == nums[hi - 1]) hi--;
+        // skip duplicates
+        while (lo < hi && nums[lo] == nums[lo + 1]) ++lo;
+        while (lo < hi && nums[hi] == nums[hi - 1]) --hi;
         ++lo;
         --hi;
       } else if (sum < 0) {
         // too low
-        lo++;
+        ++lo;
       } else {
         // too high
-        hi--;
+        --hi;
       }
     }
   }
