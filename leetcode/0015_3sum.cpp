@@ -42,29 +42,30 @@ std::vector<std::vector<int>> threeSum(const std::vector<int>& nums_input) {
 }
 }  // namespace p0015
 
+using Triplets = std::vector<std::vector<int>>;
+
+Triplets normalized(Triplets t) {
+  for (auto& v : t) std::sort(v.begin(), v.end());
+  std::sort(t.begin(), t.end());
+  return t;
+}
+
 TEST(P0015, ThreeSum) {
-  std::vector<int> nums = {-1, 0, 1, 2, -1, -4};
-  EXPECT_THAT(p0015::threeSum(nums),
-              testing::UnorderedElementsAre(testing::UnorderedElementsAre(-1, -1, 2),
-                                            testing::UnorderedElementsAre(-1, 0, 1)));
-  nums = {0, 0, 0};
-  EXPECT_THAT(p0015::threeSum(nums),
-              testing::UnorderedElementsAre(testing::UnorderedElementsAre(0, 0, 0)));
-
-  nums = {0, 0};
-  EXPECT_THAT(p0015::threeSum(nums), testing::UnorderedElementsAre());
-
-  nums = {-2, 0, 1, 1, 2};
-  EXPECT_THAT(p0015::threeSum(nums),
-              testing::UnorderedElementsAre(testing::UnorderedElementsAre(-2, 0, 2),
-                                            testing::UnorderedElementsAre(-2, 1, 1)));
-
-  nums = {-4, 2, 2, 2, 2};
-  EXPECT_THAT(p0015::threeSum(nums),
-              testing::UnorderedElementsAre(testing::UnorderedElementsAre(-4, 2, 2)));
-  nums = {-3, -1, 0, 1, 2, 3};
-  EXPECT_THAT(p0015::threeSum(nums),
-              testing::UnorderedElementsAre(testing::UnorderedElementsAre(-3, 0, 3),
-                                            testing::UnorderedElementsAre(-3, 1, 2),
-                                            testing::UnorderedElementsAre(-1, 0, 1)));
+  struct Case {
+    std::vector<int> nums;
+    Triplets expected;
+  };
+  const Case cases[] = {
+      {{-1, 0, 1, 2, -1, -4}, {{-1, -1, 2}, {-1, 0, 1}}},
+      {{0, 0, 0}, {{0, 0, 0}}},
+      {{0, 0}, {}},
+      {{}, {}},
+      {{-2, 0, 1, 1, 2}, {{-2, 0, 2}, {-2, 1, 1}}},
+      {{-4, 2, 2, 2, 2}, {{-4, 2, 2}}},  // duplicate skipping
+      {{-3, -1, 0, 1, 2, 3}, {{-3, 0, 3}, {-3, 1, 2}, {-1, 0, 1}}},
+  };
+  for (const auto& c : cases) {
+    SCOPED_TRACE(testing::PrintToString(c.nums));
+    EXPECT_EQ(normalized(p0015::threeSum(c.nums)), normalized(c.expected));
+  }
 }
