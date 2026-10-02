@@ -19,7 +19,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 include(GoogleTest)
 
-foreach(dir leetcode epi embedded)
+foreach(dir leetcode epi embedded trivia)
   file(GLOB SRCS CONFIGURE_DEPENDS ${dir}/*.cpp)
   if (SRCS)
     add_executable(${dir}_tests ${SRCS})
