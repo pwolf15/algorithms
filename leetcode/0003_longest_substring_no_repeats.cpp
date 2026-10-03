@@ -5,30 +5,17 @@
 
 namespace p0003 {
 int lengthOfLongestSubstring(std::string s) {
-  std::unordered_set<char> char_set;
+  std::unordered_set<char> window;
 
-  int max_seen = 0;
-
-  // keep left, right iterators
-  int left = 0, right = 0;
-  for (size_t i = 0; i < s.size(); ++i) {
-    if (char_set.count(s[i])) {
-      max_seen = std::max(right - left, max_seen);
-      while (s[left] != s[i]) {
-        char_set.erase(s[left]);
-        left++;
-      }
-
-      left++;
-      right = i;
+  int best = 0, left = 0;
+  for (int right = 0; right < static_cast<int>(s.size()); ++right) {
+    while (window.contains(s[right])) {
+      window.erase(s[left++]);
     }
-
-    char_set.insert(s[right++]);
+    best = std::max(best, right - left + 1);
+    window.insert(s[right]);
   }
-
-  max_seen = std::max(right - left, max_seen);
-
-  return max_seen;
+  return best;
 }
 }  // namespace p0003
 
