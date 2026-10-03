@@ -5,8 +5,8 @@
 
 namespace p0003 {
 int lengthOfLongestSubstring(std::string s) {
-  int last[128];
-  for (int i = 0; i < 128; ++i) last[i] = -1;
+  std::array<int, 128> last;
+  last.fill(-1);
 
   int best = 0, left = 0;
   for (int right = 0; right < static_cast<int>(s.size()); ++right) {
