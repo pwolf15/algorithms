@@ -6,51 +6,15 @@
 
 namespace p0049 {
 std::vector<std::vector<std::string>> groupAnagrams(const std::vector<std::string>& strs) {
-  // per string in strs, map alpha to count
-  std::vector<std::array<int, 26>> counts(strs.size());
-  for (auto& count : counts) {
-    count.fill(0);
+  std::unordered_map<std::string, std::vector<std::string>> groups;
+  for (const auto& s : strs) {
+    std::string key = s;
+    std::sort(key.begin(), key.end());
+    groups[key].push_back(s);
   }
-  for (int i = 0; i < static_cast<int>(strs.size()); ++i) {
-    for (const char c : strs[i]) {
-      counts[i][c - 'a']++;
-    }
-  }
-
-  // get unique counts
-  std::vector<int> unique_counts;
-  std::unordered_map<int, std::vector<int>> groups;
-  for (int i = 0; i < static_cast<int>(counts.size()); ++i) {
-    // compare to existing in unique_counts;
-    bool match_found = false;
-    for (int j = 0; j < static_cast<int>(unique_counts.size()); ++j) {
-      // look for match, else add
-      int match = j;
-      for (int k = 0; k < 26; ++k) {
-        if (counts[i][k] != counts[unique_counts[j]][k]) {
-          match = -1;
-          break;
-        }
-      }
-      if (match == j) {
-        groups[unique_counts[j]].push_back(i);
-        match_found = true;
-        break;
-      }
-    }
-    if (!match_found) {
-      unique_counts.push_back(i);
-      groups[i].push_back(i);
-    }
-  }
-
-  std::vector<std::vector<std::string>> results(unique_counts.size());
-  for (int i = 0; i < static_cast<int>(unique_counts.size()); ++i) {
-    auto& group = groups[unique_counts[i]];
-    for (int j = 0; j < static_cast<int>(group.size()); ++j) {
-      results[i].push_back(strs[group[j]]);
-    }
-  }
+  std::vector<std::vector<std::string>> results;
+  results.reserve(groups.size());
+  for (auto& [_, group] : groups) results.push_back(std::move(group));
   return results;
 }
 }  // namespace p0049
