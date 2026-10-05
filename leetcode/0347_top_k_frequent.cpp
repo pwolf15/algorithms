@@ -12,20 +12,16 @@ std::vector<int> topKFrequent(const std::vector<int>& nums, int k) {
     counts[num]++;
   }
 
-  // create min-heap
-  auto cmp = [](const auto& a, const auto& b) { return a.first > b.first; };
-  std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(cmp)> heap;
+  std::vector<std::vector<int>> buckets(nums.size() + 1);
   for (const auto& [v, c] : counts) {
-    heap.push({c, v});
-
-    // pop when count(elements) > k
-    if (static_cast<int>(heap.size()) > k) heap.pop();
+    buckets[c].push_back(v);
   }
 
   std::vector<int> results;
-  while (!heap.empty()) {
-    results.push_back(heap.top().second);
-    heap.pop();
+  results.reserve(k);
+  for (int i = static_cast<int>(nums.size()); i > 0; --i) {
+    if (static_cast<int>(results.size()) == k) return results;
+    results.insert(results.end(), buckets[i].begin(), buckets[i].end());
   }
   return results;
 }
