@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 
+#include <queue>
 #include <unordered_map>
 #include <vector>
 
@@ -11,24 +12,27 @@ std::vector<int> topKFrequent(const std::vector<int>& nums, int k) {
     counts[num]++;
   }
 
-  std::vector<int> keys;
-  keys.reserve(counts.size());
-  for (const auto& [v, c] : counts) keys.push_back(v);
+  // create min-heap
+  auto cmp = [](const auto& a, const auto& b) { return a.first > b.first; };
+  std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(cmp)> heap;
+  for (const auto& [v, c] : counts) {
+    heap.push({c, v});
 
-  // partial sort top-k
-  auto cmp = [&](int a, int b) {
-    int ca = counts.at(a), cb = counts.at(b);
-    return ca != cb ? ca > cb : a < b;
-  };
-  std::partial_sort(keys.begin(), keys.begin() + k, keys.end(), cmp);
+    // pop when count(elements) > k
+    if (static_cast<int>(heap.size()) > k) heap.pop();
+  }
 
-  // return first k elements
-  keys.resize(k);
-  return keys;
+  std::vector<int> results;
+  while (!heap.empty()) {
+    results.push_back(heap.top().second);
+    heap.pop();
+  }
+  return results;
 }
 }  // namespace p0347
 
 TEST(P0347, Basic) {
-  EXPECT_EQ(p0347::topKFrequent({1, 2, 2, 3, 3, 3}, 2), std::vector<int>({3, 2}));
-  EXPECT_EQ(p0347::topKFrequent({1, 2, 1, 2, 1, 2, 3, 1, 3, 2}, 2), std::vector<int>({1, 2}));
+  EXPECT_THAT(p0347::topKFrequent({1, 2, 2, 3, 3, 3}, 2), testing::UnorderedElementsAre(3, 2));
+  EXPECT_THAT(p0347::topKFrequent({1, 2, 1, 2, 1, 2, 3, 1, 3, 2}, 2),
+              testing::UnorderedElementsAre(1, 2));
 }
