@@ -14,7 +14,7 @@ std::string pad(int n, int width) {
     result = std::to_string(n % 10) + result;
     n /= 10;
   }
-  while (result.size() < width) {
+  while (static_cast<int>(result.size()) < width) {
     result = "0" + result;
   }
   return result;
@@ -52,6 +52,7 @@ std::vector<std::string> decode(std::string s) {
     vec_dec.push_back(s.substr(offset, header.sizes[i]));
     offset += header.sizes[i];
     num_words--;
+    i++;
   }
   return vec_dec;
 }
@@ -65,4 +66,5 @@ TEST(P0271, Basic) {
   EXPECT_EQ(p0271::decode(p0271::encode({"Hello", "World"})),
             std::vector<std::string>({"Hello", "World"}));
   EXPECT_EQ(p0271::decode(p0271::encode({""})), std::vector<std::string>({""}));
+  EXPECT_EQ(p0271::decode(p0271::encode({"", "vn"})), std::vector<std::string>({"", "vn"}));
 }
