@@ -4,24 +4,25 @@
 
 namespace p0238 {
 std::vector<int> productExceptSelf(const std::vector<int>& nums) {
-  int product = 1, num_zeros = 0;
-  for (int num : nums) {
-    if (!num) {
-      num_zeros++;
-      continue;
-    }
-    product *= num;
+  std::vector<int> prefix_products(nums.size()), suffix_products(nums.size());
+
+  // prefices
+  prefix_products[0] = 1;
+
+  for (int i = 1; i < static_cast<int>(nums.size()); ++i) {
+    prefix_products[i] = nums[i - 1] * prefix_products[i - 1];
+  }
+
+  // suffices
+  suffix_products[static_cast<int>(nums.size()) - 1] = 1;
+  for (int i = static_cast<int>(nums.size()) - 2; i >= 0; --i) {
+    suffix_products[i] = nums[i + 1] * suffix_products[i + 1];
   }
 
   std::vector<int> products;
   products.reserve(nums.size());
-  for (int num : nums) {
-    if (num_zeros >= 2)
-      products.push_back(0);
-    else if (num_zeros == 1)
-      products.push_back(num == 0 ? product : 0);
-    else
-      products.push_back(product / num);
+  for (int i = 0; i < static_cast<int>(nums.size()); ++i) {
+    products.push_back(prefix_products[i] * suffix_products[i]);
   }
   return products;
 }
