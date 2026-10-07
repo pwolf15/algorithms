@@ -16,15 +16,12 @@ std::vector<int> productExceptSelf(const std::vector<int>& nums) {
   std::vector<int> products;
   products.reserve(nums.size());
   for (int num : nums) {
-    if (!num && num_zeros == 1) {
-      products.push_back(product);
-    } else if (num && num_zeros) {
+    if (num_zeros >= 2)
       products.push_back(0);
-    } else if (num_zeros >= 2) {
-      products.push_back(0);
-    } else {
+    else if (num_zeros == 1)
+      products.push_back(num == 0 ? product : 0);
+    else
       products.push_back(product / num);
-    }
   }
   return products;
 }
