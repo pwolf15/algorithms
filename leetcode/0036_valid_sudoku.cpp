@@ -1,47 +1,23 @@
 #include <gmock/gmock.h>
 
-#include <unordered_set>
 #include <vector>
 
 namespace p0036 {
 bool isValidSudoku(const std::vector<std::vector<char>>& board) {
-  bool is_valid = true;
-
-  // check columns
-  std::unordered_set<char> vert, horiz;
-  for (int i = 0; i < 9; ++i) {
-    for (int j = 0; j < 9; ++j) {
-      if (board[i][j] != '.' && vert.count(board[i][j])) return false;
-      if (board[j][i] != '.' && horiz.count(board[j][i])) return false;
-
-      vert.insert(board[i][j]);
-      horiz.insert(board[j][i]);
-    }
-    vert.clear();
-    horiz.clear();
-  }
-
-  std::vector<std::pair<int, int>> grid_corners;
-  for (int i = 0; i < 9; i += 3) {
-    for (int j = 0; j < 9; j += 3) {
-      grid_corners.push_back({i, j});
+  std::array<int, 9> rows{}, cols{}, boxes{};
+  for (int r = 0; r < 9; ++r) {
+    for (int c = 0; c < 9; ++c) {
+      const char ch = board[r][c];
+      if (ch == '.') continue;
+      const int b = (r / 3) * 3 + (c / 3);
+      const int bit = 1 << (ch - '1');
+      if ((rows[r] | cols[c] | boxes[b]) & bit) return false;
+      rows[r] |= bit;
+      cols[c] |= bit;
+      boxes[b] |= bit;
     }
   }
-  for (const auto& corner : grid_corners) {
-    int x_offset = std::get<0>(corner);
-    int y_offset = std::get<1>(corner);
-    std::unordered_set<char> grid;
-    for (int i = y_offset; i < y_offset + 3; ++i) {
-      for (int j = x_offset; j < x_offset + 3; ++j) {
-        if (board[i][j] != '.' && grid.count(board[i][j])) return false;
-
-        grid.insert(board[i][j]);
-      }
-    }
-  }
-
-  // check 3x3
-  return is_valid;
+  return true;
 }
 }  // namespace p0036
 
