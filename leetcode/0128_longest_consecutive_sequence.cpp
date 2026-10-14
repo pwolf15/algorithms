@@ -5,14 +5,19 @@
 
 namespace p0128 {
 int longestConsecutive(const std::vector<int>& nums) {
-  std::unordered_set<int> num_map;
+  // track seen elements
+  std::unordered_set<int> seen(nums.begin(), nums.end());
+
   int max_len = 0;
 
-  for (int i = 0; i < static_cast<int>(nums.size()); ++i) num_map.insert(nums[i]);
-  for (int i = 0; i < static_cast<int>(nums.size()); ++i) {
-    int target = nums[i] + 1;
+  for (int x : seen) {
+    // if x - 1 exists, walk from x - 1, not x
+    if (seen.count(x - 1)) continue;
+
+    // walk sequence
+    int target = x + 1;
     int cur_len = 1;
-    while (num_map.count(target)) {
+    while (seen.count(target)) {
       cur_len++;
       target++;
     }
